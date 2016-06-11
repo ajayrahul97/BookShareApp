@@ -31,7 +31,8 @@
         <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.MyBooks" />
         <activity android:name=".ui.BookDetailsActivity" />
-        <activity android:name=".ui.UserProfile"></activity>
+        <activity android:name=".ui.UserProfile" />
+        <activity android:name=".ui.NotificationActivity" />
         <activity android:name=".ui.SplashScreen">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,8 @@
 package com.example.abhishek.bookshareapp.ui;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -7,11 +10,13 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +31,7 @@ import com.example.abhishek.bookshareapp.R;
 import com.example.abhishek.bookshareapp.api.NetworkingFactory;
 import com.example.abhishek.bookshareapp.api.UsersAPI;
 import com.example.abhishek.bookshareapp.api.models.LocalBooks.Book;
+import com.example.abhishek.bookshareapp.api.models.Notification.Notifications;
 import com.example.abhishek.bookshareapp.ui.adapter.MainScreenBooksAdapter;
 import com.example.abhishek.bookshareapp.utils.Helper;
 
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(Book book) {
                 Intent intent = new Intent(getApplicationContext(), BookDetailsActivity.class);
                 intent.putExtra("id", book.getId());
-                Log.i(TAG, "onItemClick");
+                Log.i("BookId:", book.getId());
                 startActivity(intent);
             }
         });
@@ -104,16 +110,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        refreshLayout =(SwipeRefreshLayout)findViewById(R.id.refresh_layout);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 Log.i(TAG, "onRefresh called from SwipeRefreshLayout");
                 getLocalBooks();
-                Toast.makeText(MainActivity.this,"Refresh!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Refresh!", Toast.LENGTH_SHORT).show();
 
             }
         });
+
+        refresh();
+
     }
 
 
@@ -130,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent i = new Intent(this, UserProfile.class);
             i.putExtra("id", prefs.getString("id", prefs.getString("id", "")));
             startActivity(i);
-
 
 
         } else if (id == R.id.nav_change_password) {
@@ -166,8 +174,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_notifications) {
+            Intent i = new Intent(this, NotificationActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -201,6 +210,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+    }
+
+    public void refresh() {
+        UsersAPI usersAPI = NetworkingFactory.getLocalInstance().getUsersAPI();
+        Call<List<Notifications>> call = usersAPI.getNotifs(prefs.getString("id", null));
+        call.enqueue(new Callback<List<Notifications>>() {
+            @Override
+            public void onResponse(Call<List<Notifications>> call, Response<List<Notifications>> response) {
+                if (response.body() != null) {
+                    List<Notifications> notifList = response.body();
+
+
+                    for (int i = 0; i < notifList.size(); i++) {
+
+                        Log.i("harshit", "" + notifList.size());
+                        String content = "";
+
+                        Notifications notifications = notifList.get(i);
+                        if (notifications.getMessage().equals("requested for")) {
+                            content = notifications.getSenderName() + " requested for " + notifications.getBookTitle() + "\n";
+                        } else if (notifications.getMessage().equals("You rejected request for")) {
+                            if (!notifications.getSenderId().equals(prefs.getString("id", null))) {
+                                content = notifications.getSenderName() + " rejected your request for " + notifications.getBookTitle();
+                            }
+                        } else if (notifications.getMessage().equals("has accepted your request for")) {
+                            content = notifications.getSenderName() + " " + notifications.getMessage() + " " + notifications.getBookTitle() + "\n";
+                        }
+
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(getApplicationContext())
+                                        .setSmallIcon(R.drawable.plus)
+                                        .setContentTitle("BookShareApp")
+                                        .setContentText(content)
+                                        .setAutoCancel(true);
+
+                        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle()
+                                .setBigContentTitle("BookShareApp")
+                                .bigText(content);
+
+                        mBuilder.setStyle(bigTextStyle);
+
+                        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+
+                        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+                        stackBuilder.addParentStack(MainActivity.class);
+                        stackBuilder.addNextIntent(resultIntent);
+                        PendingIntent resultPendingIntent =
+                                stackBuilder.getPendingIntent(
+                                        0,
+                                        PendingIntent.FLAG_UPDATE_CURRENT
+                                );
+                        mBuilder.setContentIntent(resultPendingIntent);
+                        NotificationManager mNotificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(1, mBuilder.build());
+                    }
+
+
+                } else
+                    Log.i("harshit", "List.size() == 0");
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Notifications>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Check your network connectivity and try again!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

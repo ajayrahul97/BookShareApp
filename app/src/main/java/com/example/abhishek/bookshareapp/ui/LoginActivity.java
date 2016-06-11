@@ -18,7 +18,7 @@ import com.example.abhishek.bookshareapp.api.NetworkingFactory;
 import com.example.abhishek.bookshareapp.api.UsersAPI;
 import com.example.abhishek.bookshareapp.api.models.Login;
 import com.example.abhishek.bookshareapp.api.models.UserInfo;
-import com.example.abhishek.bookshareapp.api.models.VerifyToken.UserEmail;
+import com.example.abhishek.bookshareapp.api.models.VerifyToken.Detail;
 import com.example.abhishek.bookshareapp.utils.CommonUtilities;
 import com.example.abhishek.bookshareapp.utils.Helper;
 
@@ -222,16 +222,16 @@ public class LoginActivity extends AppCompatActivity {
                     build();
 
             UsersAPI usersAPI = retrofit.create(UsersAPI.class);
-            Call<UserEmail> call = usersAPI.getUserEmail();
-            call.enqueue(new Callback<UserEmail>() {
+            Call<Detail> call = usersAPI.getUserEmail();
+            call.enqueue(new Callback<Detail>() {
                 @Override
-                public void onResponse(Call<UserEmail> call, Response<UserEmail> response) {
+                public void onResponse(Call<Detail> call, Response<Detail> response) {
 
                     if(response.body() != null) {
-                        if (response.body().getEmail() != null) {
-                            if (!response.body().getEmail().equals("")) {
+                        if (response.body().getDetail() != null) {
+                            if (!response.body().getDetail().equals("")) {
 
-                                Helper.setUserEmail(response.body().getEmail());
+                                Helper.setUserEmail(response.body().getDetail());
                                 Intent intent = new Intent(context, MainActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -249,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<UserEmail> call, Throwable t) {
+                public void onFailure(Call<Detail> call, Throwable t) {
                     Toast.makeText(context, "Check network connectivity and try again", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -66,8 +66,6 @@ public class BookDetailsActivity extends AppCompatActivity{
         String id = getIntent().getExtras().getString("id");
         getBookDetails(id);
 
-
-
     }
 
     public void getBookDetails(String id){
@@ -81,13 +79,15 @@ public class BookDetailsActivity extends AppCompatActivity{
                     book = response.body();
                     titleBook.setText(book.getTitle());
                     authorBook.setText(book.getAuthor());
-                    ratingCount.setText(book.getRatingsCount().toString());
+                    ratingCount.setText(book.getRatingsCount().toString() + " votes");
                     ratingBook.setRating(book.getRating());
                     Picasso.with(BookDetailsActivity.this).load(book.getGrImgUrl()).into(imageBook);
 
                     List<UserInfo> userTempInfoList = book.getUserInfoList();
                     userInfoList.clear();
                     userInfoList.addAll(userTempInfoList);
+                    usersAdapter.setBookId(book.getId());
+                    usersAdapter.setBookTitle(book.getTitle());
                     usersAdapter.notifyDataSetChanged();
                 }
             }
