@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton button = (FloatingActionButton) findViewById(R.id.button);
         RecyclerView localBooksList = (RecyclerView) findViewById(R.id.localBooksList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         localBooksList.setLayoutManager(layoutManager);
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter = new BooksAdapterSimple(this, booksList, new BooksAdapterSimple.OnItemClickListener() {
             @Override
             public void onItemClick(Book book) {
-                Intent intent = new Intent(getApplicationContext(), BookDetailsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), BookDetailsActivity2.class);
                 intent.putExtra("id", book.getId());
                 Log.i(TAG, "onItemClick");
                 startActivity(intent);
@@ -78,16 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getNotifications();
         Helper.setUserId(prefs.getString("id", prefs.getString("id", "")));
         Helper.setUserName(prefs.getString("first_name", null) + " " + prefs.getString("last_name", null));
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, SearchResultsActivity.class);
-                startActivity(i);
-            }
-        });
-
-
+        
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
