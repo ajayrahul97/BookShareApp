@@ -53,7 +53,6 @@ public class UserProfile extends AppCompatActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("User Profile");
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
-        setPalette();
 
 
         RecyclerView userBooksList = (RecyclerView) findViewById(R.id.userBooksLists);

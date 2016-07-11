@@ -1,5 +1,6 @@
 package com.example.abhishek.bookshareapp.ui;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -90,11 +92,11 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,R.style.NewDialog);
         progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("Verifying Your Identity.");
         progressDialog.show();
-
+        progressDialog.getWindow().setGravity(Gravity.CENTER_HORIZONTAL);
         String email = _emailText.getText().toString() + "@iitr.ac.in";
         String password = _passwordText.getText().toString();
         Helper.setUserEmail(email);

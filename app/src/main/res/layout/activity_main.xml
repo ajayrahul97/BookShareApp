@@ -23,35 +23,46 @@
             android:titleTextColor="@color/White"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/refresh_layout"
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="500dp"
+            android:text="No Book Found"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:foregroundGravity="center_horizontal"
+            android:id="@+id/no_book"
+            android:textSize="18sp"
+            android:visibility="gone"/>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/localBooksList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:scrollIndicators="start"
+                android:scrollbarSize="2dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/localBooksList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollIndicators="start"
-                    android:scrollbarSize="2dp"
-                    android:scrollbarStyle="outsideOverlay"
-                    android:scrollbars="vertical">
+            </android.support.v7.widget.RecyclerView>
 
-                </android.support.v7.widget.RecyclerView>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/plus" />
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="bottom|end"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginRight="16dp"
-                    android:src="@drawable/plus" />
-
-            </android.support.v4.widget.SwipeRefreshLayout>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 

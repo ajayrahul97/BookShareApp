@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Toolbar toolbar;
     int backCounter=0;
     ImageView _profilePicture;
+    TextView no_book;
     String url;
 
     public String getResp() {
@@ -86,9 +87,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Helper.setUserName(prefs.getString("first_name", null) + " " + prefs.getString("last_name", null));
 
         setContentView(R.layout.activity_main);
-        new ProgressLoader().execute(15);
 
         button = (FloatingActionButton) findViewById(R.id.button);
+        no_book=(TextView)findViewById(R.id.no_book);
         localBooksList = (RecyclerView) findViewById(R.id.localBooksList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         localBooksList.setLayoutManager(layoutManager);
@@ -98,10 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(Book book) {
 
                 if(isOnline()){
-                Intent intent = new Intent(MainActivity.this,BookDetailsActivity.class);
-                intent.putExtra("id", book.getId());
-                startActivity(intent);
-                Log.i(TAG, "onItemClick");}
+                    Intent intent = new Intent(MainActivity.this,BookDetailsActivity.class);
+                    intent.putExtra("id", book.getId());
+                    startActivity(intent);
+                    Log.i(TAG, "onItemClick");}
                 else {
                     Toast.makeText(getApplicationContext(),"Not connected to Internet", Toast.LENGTH_SHORT).show();
                 }
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         localBooksList.setAdapter(adapter);
-
+        no_book.setVisibility(View.GONE);
         getLocalBooks("1");
 
         final EndlessScrollListener endlessScrollListener = new EndlessScrollListener((LinearLayoutManager) layoutManager) {
@@ -249,6 +250,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     booksList.addAll(localBooksList);
                     adapter.notifyDataSetChanged();
                     refreshLayout.setRefreshing(false);
+
+                    if(response.body()!=null){
+                        Toast.makeText(getApplicationContext(), "404 : Book Not Found, Better Buy It !", Toast.LENGTH_SHORT).show();
+                        no_book.setVisibility(View.VISIBLE);
+                    }else {
+                        no_book.setVisibility(View.GONE);
+                    }
                 }
 
             }
@@ -283,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 notif_item.setVisible(true);
+                no_book.setVisibility(View.GONE);
                 getLocalBooks("1");
                 return true;
             }
@@ -365,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void getLocalBooks(final String page) {
+        new ProgressLoader().execute(15);
         UsersAPI api = NetworkingFactory.getLocalInstance().getUsersAPI();
         Call<BookList> call = api.getBList(page);
         call.enqueue(new Callback<BookList>() {
