@@ -4,17 +4,17 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root(name="GoodreadsResponse",strict = false)
-public class GoodreadsResponse {
+public class GoodreadsResponse2 {
 
 
-    @Element(name="search")
-    public Search search;
-    public Search getSearch(){
-        return search;
+    @Element(name="book")
+    public BookDescription bDesc;
+
+    public BookDescription getbDesc() {
+        return bDesc;
     }
 
-
-    public GoodreadsResponse(){
+    public GoodreadsResponse2(){
 
     }
 

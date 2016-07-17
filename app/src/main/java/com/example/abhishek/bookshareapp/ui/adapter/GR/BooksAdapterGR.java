@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abhishek.bookshareapp.R;
+import com.example.abhishek.bookshareapp.api.BooksAPI;
 import com.example.abhishek.bookshareapp.api.NetworkingFactory;
 import com.example.abhishek.bookshareapp.api.UsersAPI;
 import com.example.abhishek.bookshareapp.api.models.Book;
+import com.example.abhishek.bookshareapp.api.models.BookDescription;
+import com.example.abhishek.bookshareapp.api.models.GoodreadsResponse2;
+import com.example.abhishek.bookshareapp.utils.CommonUtilities;
 import com.example.abhishek.bookshareapp.utils.Helper;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +38,9 @@ public class BooksAdapterGR extends RecyclerView.Adapter<BooksAdapterGR.ViewHold
     private Context context;
     private List<Book> bookList;
     Book tempValues=null;
+    BookDescription tempDescp;
+    SpannedString dd;
+    String description;
     private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -83,11 +92,11 @@ public class BooksAdapterGR extends RecyclerView.Adapter<BooksAdapterGR.ViewHold
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final String email,title,author,gr_id,gr_img_url;
+        final Integer search_id;
         final Long ratingsCount;
         final Float rating;
         holder.add.setEnabled(true);
         tempValues = bookList.get(position);
-
         holder.titleBook.setText(tempValues.getBookDetails().getTitle());
         holder.authorBook.setText(tempValues.getBookDetails().getAuthor().getAuthor_name());
         Picasso.with(this.context).load(tempValues.getBookDetails().getImage_url()).into(holder.imageBook);
@@ -100,7 +109,7 @@ public class BooksAdapterGR extends RecyclerView.Adapter<BooksAdapterGR.ViewHold
         rating=tempValues.getRating();
         ratingsCount = Long.parseLong(tempValues.getRatingCount());
         gr_id= tempValues.getId().toString();
-
+        search_id=tempValues.getBookDetails().getId();
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +120,37 @@ public class BooksAdapterGR extends RecyclerView.Adapter<BooksAdapterGR.ViewHold
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d("ssswwwqqq",tempValues.getBookDetails().getId()+" ID");
+
+                BooksAPI api = NetworkingFactory.getGRInstance().getBooksApi();
+                Call<GoodreadsResponse2> call = api.getBookDescription(search_id, CommonUtilities.API_KEY);
+                call.enqueue(new Callback<GoodreadsResponse2>() {
+                    @Override
+                    public void onResponse(Call<GoodreadsResponse2> call, Response<GoodreadsResponse2> response) {
+                        if(response!=null){
+                            tempDescp= response.body().getbDesc();
+                            description= tempDescp.getBDescription();
+                            dd=SpannedString.valueOf(description);
+
+                            Log.i("wtf",dd.toString());
+                            Log.i("wtf",description);
+                        }
+                        else {
+                            description="No Description";
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<GoodreadsResponse2> call, Throwable t) {
+                        Log.i("wtf",t.toString()+"Hell");
+                        description="No Description";
+
+
+                    }
+                });
+
 
                 final CharSequence[] items = { "Yes", "No"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
