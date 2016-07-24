@@ -30,6 +30,15 @@
         android:layout_below="@+id/toolbar"
         android:layout_centerHorizontal="true" />
 
+    <ProgressBar
+        android:layout_width="313dp"
+        android:id="@+id/progress"
+        android:layout_height="164dp"
+        android:layout_centerInParent="true"
+        android:foregroundGravity="center"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -43,16 +52,8 @@
         android:scrollbars="vertical"
         android:layout_marginBottom="2dp"
         android:layout_below="@+id/textView" />
-    <ProgressBar
-        android:layout_width="100dp"
-        android:id="@+id/progress"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:foregroundGravity="center"
-        android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal"
-        />
+
+
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

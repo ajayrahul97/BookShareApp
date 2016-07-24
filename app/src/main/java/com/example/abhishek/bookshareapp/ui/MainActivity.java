@@ -6,13 +6,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -214,9 +217,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPreExecute() {
             progress = new ProgressDialog(MainActivity.this);
             progress.setMessage("Turning To Page 394...");
-            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progress.setIndeterminate(true);
-            progress.setIndeterminateDrawable(getResources().getDrawable(R.drawable.loading));
+            progress.setIndeterminateDrawable(getResources().getDrawable(R.drawable.progress_indeterminate_horizontal));
             progress.setMax(5);
             progress.setProgress(0);
             progress.setCancelable(false);
@@ -418,8 +420,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(intent);
 
         } else {
-            Toast.makeText(this, "Press  again to exit.", Toast.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), "       Press Again To Exit", Snackbar.LENGTH_LONG).show();
             backCounter++;
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    backCounter=0;
+                }
+            }, 2000);
+
+
+
         }
     }
 

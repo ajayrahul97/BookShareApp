@@ -72,10 +72,10 @@ public class MyBooks extends AppCompatActivity {
         noItemsTextView = (TextView) findViewById(R.id.no_items_text);
 
         prog = (ProgressBar) findViewById(R.id.progress);
+        prog.setVisibility(View.VISIBLE);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        new ProgressLoader().execute(15);
-
-
+//        new ProgressLoader().execute(15);
+        prog.setIndeterminate(true);
         SharedPreferences preferences = getSharedPreferences("Token", MODE_PRIVATE);
         String id = preferences.getString("id", "");
 
@@ -178,6 +178,7 @@ public class MyBooks extends AppCompatActivity {
                     booksList.clear();
                     booksList.addAll(booksTempInfoList);
                     adapter.notifyDataSetChanged();
+                    prog.setVisibility(View.GONE);
                 }
             }
 

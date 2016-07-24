@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +23,7 @@ import com.example.abhishek.bookshareapp.api.NetworkingFactory;
 import com.example.abhishek.bookshareapp.api.UsersAPI;
 import com.example.abhishek.bookshareapp.api.models.LocalBooks.Book;
 import com.example.abhishek.bookshareapp.api.models.UserInfo;
-import com.example.abhishek.bookshareapp.ui.adapter.Local.BooksAdapterSimple;
+import com.example.abhishek.bookshareapp.ui.adapter.Local.BooksAdapterSimple2;
 import com.example.abhishek.bookshareapp.utils.CommonUtilities;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,8 @@ public class UserProfile extends AppCompatActivity {
     TextView name,email,address, booksCount;
     UserInfo user;
     List<Book> booksList;
-    BooksAdapterSimple adapter;
+    ProgressBar prog;
+    BooksAdapterSimple2 adapter;
     ImageView profile_picture, background_image;
 
     @Override
@@ -51,13 +53,15 @@ public class UserProfile extends AppCompatActivity {
         profile_picture = (ImageView) findViewById(R.id.profile_picture);
         background_image = (ImageView) findViewById(R.id.background_image);
         booksCount = (TextView) findViewById(R.id.books_count);
+        prog = (ProgressBar) findViewById(R.id.progress);
+        prog.setVisibility(View.VISIBLE);
         String id = getIntent().getExtras().getString("id");
 
         RecyclerView userBooksList = (RecyclerView) findViewById(R.id.userBooksLists);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         userBooksList.setLayoutManager(layoutManager);
         booksList = new ArrayList<>();
-        adapter = new BooksAdapterSimple(this, booksList, new BooksAdapterSimple.OnItemClickListener() {
+        adapter = new BooksAdapterSimple2(this,id, booksList, new BooksAdapterSimple2.OnItemClickListener() {
             @Override
             public void onItemClick(Book book) {
                 Log.i("Click", "onItemClick");
@@ -99,6 +103,8 @@ public class UserProfile extends AppCompatActivity {
                     booksList.clear();
                     booksList.addAll(booksTempInfoList);
                     adapter.notifyDataSetChanged();
+                    prog.setVisibility(View.GONE);
+
                 }
             }
 
