@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:variablePadding="false"
     android:oneshot="false">
-    <item android:drawable="@drawable/b1" android:duration="200"/>
-    <item android:drawable="@drawable/b2" android:duration="200" />
-    <item android:drawable="@drawable/b3" android:duration="200" />
-    <item android:drawable="@drawable/b4" android:duration="200" />
-    <item android:drawable="@drawable/b5" android:duration="200" />
+    <item android:drawable="@drawable/b1" android:duration="150"/>
+    <item android:drawable="@drawable/b2" android:duration="150" />
+    <item android:drawable="@drawable/b3" android:duration="150" />
+    <item android:drawable="@drawable/b4" android:duration="150" />
+    <item android:drawable="@drawable/b5" android:duration="150" />
 
 </animation-list>

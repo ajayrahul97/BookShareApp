@@ -22,10 +22,16 @@ public class Book {
     String email;
     @SerializedName("owner")
     List<UserInfo> userInfoList;
+    @SerializedName("description")
+    String description;
 
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getEmail() {

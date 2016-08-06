@@ -67,8 +67,10 @@ public interface UsersAPI {
             @Field("gr_id") String gr_id,
             @Field("ratings_count") Long ratingsCount,
             @Field("rating") Float rating,
-            @Field("gr_img_url") String gr_img_url
-    );
+            @Field("gr_img_url") String gr_img_url,
+            @Field("description") String description
+
+            );
 
     @GET("book/{id}/?format=json")
     Call<Book> getBookDetails(

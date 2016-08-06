@@ -25,9 +25,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +53,15 @@ import retrofit2.Response;
 
 public class MyBooks extends AppCompatActivity {
     List<Book> booksList;
+    FrameLayout frameLayout;
     BookAdapter adapter;
     RecyclerView mRecyclerView;
     Integer count = 1;
     ProgressDialog progress; // this is not used ,in this activity as of now...Just for testing purposes.
     ProgressBar prog;
     String Resp;
-    TextView noItemsTextView;
 
+    TextView noItemsTextView;
     public String getResp() {
         return Resp;
     }
@@ -70,12 +73,15 @@ public class MyBooks extends AppCompatActivity {
         setContentView(R.layout.activity_my_books);
 
         noItemsTextView = (TextView) findViewById(R.id.no_items_text);
-
         prog = (ProgressBar) findViewById(R.id.progress);
-        prog.setVisibility(View.VISIBLE);
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        frameLayout = (FrameLayout) findViewById(R.id.myBookFLayout);
+        frameLayout.getForeground().setAlpha(180);
+
+        prog.bringToFront();
+
 //        new ProgressLoader().execute(15);
-        prog.setIndeterminate(true);
+//        prog.setIndeterminate(true);
         SharedPreferences preferences = getSharedPreferences("Token", MODE_PRIVATE);
         String id = preferences.getString("id", "");
 
@@ -137,10 +143,10 @@ public class MyBooks extends AppCompatActivity {
 //            progress.setIndeterminate(true);
 //            progress.setIndeterminateDrawable(getResources().getDrawable(R.drawable.loading));
 
-            prog.setMax(5);
-            prog.setProgress(0);
-//            progress.setCancelable(false);
-            prog.setVisibility(View.VISIBLE);
+//            prog.setMax(5);
+//            prog.setProgress(0);
+////            progress.setCancelable(false);
+//            prog.setVisibility(View.VISIBLE);
 
         }
 
@@ -178,6 +184,7 @@ public class MyBooks extends AppCompatActivity {
                     booksList.clear();
                     booksList.addAll(booksTempInfoList);
                     adapter.notifyDataSetChanged();
+                    frameLayout.getForeground().setAlpha(0);
                     prog.setVisibility(View.GONE);
                 }
             }

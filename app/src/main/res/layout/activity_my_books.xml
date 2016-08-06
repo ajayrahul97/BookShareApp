@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_theme_background"
+    android:id="@+id/myBookFLayout"
+    android:foreground="@drawable/window_dim"
     tools:context=".ui.MyBooks"
     >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:layout_width="match_parent"
@@ -30,15 +40,6 @@
         android:layout_below="@+id/toolbar"
         android:layout_centerHorizontal="true" />
 
-    <ProgressBar
-        android:layout_width="313dp"
-        android:id="@+id/progress"
-        android:layout_height="164dp"
-        android:layout_centerInParent="true"
-        android:foregroundGravity="center"
-        android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal"
-        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -51,9 +52,7 @@
         android:layout_weight="1"
         android:scrollbars="vertical"
         android:layout_marginBottom="2dp"
-        android:layout_below="@+id/textView" />
-
-
+        android:layout_below="@+id/textView"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
@@ -66,5 +65,20 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="right" />
+    </RelativeLayout>
+</FrameLayout>
+
+    <ProgressBar
+        android:layout_width="313dp"
+        android:id="@+id/progress"
+        android:layout_height="164dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:foregroundGravity="center"
+        android:scaleX="0.4"
+        android:scaleY="0.4"
+        android:indeterminate="true"
+        android:indeterminateDrawable="@drawable/progress_indeterminate_horizontal"
+        />
 
 </RelativeLayout>
