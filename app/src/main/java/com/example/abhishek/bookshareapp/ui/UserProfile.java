@@ -23,6 +23,7 @@ import com.example.abhishek.bookshareapp.api.NetworkingFactory;
 import com.example.abhishek.bookshareapp.api.UsersAPI;
 import com.example.abhishek.bookshareapp.api.models.LocalBooks.Book;
 import com.example.abhishek.bookshareapp.api.models.UserInfo;
+import com.example.abhishek.bookshareapp.ui.adapter.Local.BooksAdapterRequest;
 import com.example.abhishek.bookshareapp.ui.adapter.Local.BooksAdapterSimple;
 import com.example.abhishek.bookshareapp.utils.CommonUtilities;
 import com.squareup.picasso.Picasso;
@@ -39,7 +40,7 @@ public class UserProfile extends AppCompatActivity {
     TextView name,emailTextView,address, booksCount;
     UserInfo user;
     List<Book> booksList;
-    BooksAdapterSimple adapter;
+    BooksAdapterRequest adapter;
     ImageView profile_picture, background_image;
     String contactNo;
     String email;
@@ -86,12 +87,12 @@ public class UserProfile extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         userBooksList.setLayoutManager(layoutManager);
         booksList = new ArrayList<>();
-        adapter = new BooksAdapterSimple(this, booksList, new BooksAdapterSimple.OnItemClickListener() {
+        adapter = new BooksAdapterRequest(this, booksList, new BooksAdapterRequest.OnItemClickListener() {
             @Override
             public void onItemClick(Book book) {
                 Log.i("Click", "onItemClick");
             }
-        });
+        },id);
 
         userBooksList.setAdapter(adapter);
         userBooksList.setNestedScrollingEnabled(false);
@@ -120,6 +121,7 @@ public class UserProfile extends AppCompatActivity {
                     Log.d("UserProfile Response:", response.toString());
                     user = response.body();
                     name.setText(user.getName());
+
                     email = user.getEmail();
                     emailTextView.setText(email);
                     contactNo = user.getContactNo();
